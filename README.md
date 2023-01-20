@@ -1,6 +1,23 @@
-# package-versions README
+# Package Versions
 
-This is the README for your extension "package-versions". After writing up a brief description, we recommend including the following sections.
+Local NPM installs can be set to pull from artifactory, but default VSCode only pulls from public NPM repos.
+So why not pull package information from NPM instead!
+
+### Get the latest from repository
+```bash
+$ npm view <package> version
+1.1.1
+```
+
+### Get current installed version
+```bash
+$ npm list <package> --depth=0
+your-project@0.0.1 /Users/git/your-project
+└── <package>@2.2.2
+```
+
+#### Used projects to help me figure out extensions
+- https://github.com/pgsandstrom/package-json-upgrade
 
 ## Features
 

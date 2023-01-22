@@ -40,10 +40,13 @@ export const decorateInactive = (documentUri: string, contentText: string) =>
   createDecoration(documentUri, contentText, 'darkgray', 'lightgray', 'darkgray');
 
 export const decorateMajor = (documentUri: string, contentText: string) =>
-  createDecoration(documentUri, contentText, 'red', 'red', 'red');
+  createDecoration(documentUri, contentText, '#E03419', '#C74632', 'red');
 
 export const decorateMinor = (documentUri: string, contentText: string) =>
-  createDecoration(documentUri, contentText, 'yellow', 'yellow', 'yellow');
+  createDecoration(documentUri, contentText, '#F8FF99', '#ABAB00', 'yellow');
 
 export const decoratePatch = (documentUri: string, contentText: string) =>
-  createDecoration(documentUri, contentText, 'green', 'green', 'green');
+  createDecoration(documentUri, contentText, '#19E034', '#009113', 'green');
+
+export const decoratePrerelease = (documentUri: string, contentText: string) =>
+  createDecoration(documentUri, contentText, '#EC33FF', '#C433FF', 'purple');

@@ -38,4 +38,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
   clearAllDecorations();
+  console.log('Extension "package-versions" is now deactivated!');
 }

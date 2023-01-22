@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { localVersions, remoteVersions } from './caches';
 import { clearWindowDecorations, decorateInactive } from './decorations';
 import { getDependencyPositions, isPackageJson } from './packageJson';
+import { versionDecorator } from './versionDecorator';
 
 const setupDecorations = async (textEditor: vscode.TextEditor) => {
   const documentUri = textEditor.document.uri.toString();
@@ -10,6 +11,10 @@ const setupDecorations = async (textEditor: vscode.TextEditor) => {
   if (dependencies.length === 0) {
     return;
   }
+
+  // clear after we try to get dependencies, if user editing we don't want to remove
+  // once we can't parse the json
+  clearWindowDecorations(documentUri);
 
   const refreshWithVersion = async (
     packageName: string,
@@ -20,14 +25,13 @@ const setupDecorations = async (textEditor: vscode.TextEditor) => {
       localVersions.get({ filePath, packageName }),
       remoteVersions.get(packageName)
     ]);
-    const decorator = decorateInactive(documentUri, `Current: ${local} Latest: ${remote}`);
+    const decorator = versionDecorator(documentUri, local, remote);
     previousDecoration.dispose();
-    textEditor.setDecorations(decorator, [{ range }]);
+    // Don't show if no update needed
+    if (decorator) {
+      textEditor.setDecorations(decorator, [{ range }]);
+    }
   };
-
-  // clear after we try to get dependencies, if user editing we don't want to remove
-  // once we can't parse the json
-  clearWindowDecorations(documentUri);
 
   dependencies.forEach(({ packageName: dependencyName, range }) => {
     const decorator = decorateInactive(documentUri, 'Loading...');

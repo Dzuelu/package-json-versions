@@ -6,7 +6,7 @@ const getLocalVersion = async ({
   filePath
 }: {
   filePath: string; // ex: /Users/some_user/git/eslint-config/package.json
-  packageName: string; // ex: jest
+  packageName: string; // ex: @types/vscode
 }): Promise<string> => {
   try {
     const separator = filePath.includes('\\') ? '\\' : '/';

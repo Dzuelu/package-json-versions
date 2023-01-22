@@ -17,8 +17,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "package-versions.helloWorld",
-        "title": "Hello World"
+        "command": "package-versions.clear-cache",
+        "title": "Package Versions: Clear Cache"
       }
     ]
   },

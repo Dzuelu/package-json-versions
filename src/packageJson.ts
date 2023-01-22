@@ -15,10 +15,10 @@ const getDependencies = (
     resolutions?: { [key: string]: string };
   }>(document.getText());
   return {
-    dependencies: packageJson?.dependencies ? Object.keys(packageJson.dependencies) : [],
-    devDependencies: packageJson?.devDependencies ? Object.keys(packageJson.devDependencies) : [],
-    peerDependencies: packageJson?.peerDependencies ? Object.keys(packageJson.peerDependencies) : [],
-    resolutions: packageJson?.resolutions ? Object.keys(packageJson.resolutions) : []
+    dependencies: Object.keys(packageJson?.dependencies ?? {}),
+    devDependencies: Object.keys(packageJson?.devDependencies ?? {}),
+    peerDependencies: Object.keys(packageJson?.peerDependencies ?? {}),
+    resolutions: Object.keys(packageJson?.resolutions ?? {})
   };
 };
 
@@ -58,11 +58,9 @@ export const getDependencyPositions = (
 
   // Assumes nice formatting with each package on a new line
   if (dependenciesLine) {
-    packageDependencies.dependencies.forEach((dependencyName, index) => {
-      if (!packageDependencies.peerDependencies.includes(dependencyName)) {
-        addPosition('dependency', dependencyName, dependenciesLine + index + 1);
-      }
-    });
+    packageDependencies.dependencies.forEach((dependencyName, index) =>
+      addPosition('dependency', dependencyName, dependenciesLine + index + 1)
+    );
   }
   if (devDependenciesLine) {
     packageDependencies.devDependencies.forEach((dependencyName, index) =>

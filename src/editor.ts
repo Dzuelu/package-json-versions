@@ -3,13 +3,9 @@ import { localVersions, remoteVersions } from './caches';
 import { clearWindowDecorations, decorateInactive } from './decorations';
 import { getDependencyPositions, isPackageJson } from './packageJson';
 
-const setupDecorations = async (document: vscode.TextDocument) => {
-  const textEditor = vscode.window.visibleTextEditors.find(editor => editor.document === document);
-  if (textEditor == null) {
-    return;
-  }
-
-  const dependencies = getDependencyPositions(document);
+const setupDecorations = async (textEditor: vscode.TextEditor) => {
+  const documentUri = textEditor.document.uri.toString();
+  const dependencies = getDependencyPositions(textEditor.document);
   if (dependencies.length === 0) {
     return;
   }
@@ -21,20 +17,20 @@ const setupDecorations = async (document: vscode.TextDocument) => {
   ) => {
     const [local, remote] = await Promise.all([localVersions.get(dependencyName), remoteVersions.get(dependencyName)]);
     previousDecoration.dispose();
-    const decorator = decorateInactive(`Current: ${local} Latest: ${remote}`);
+    const decorator = decorateInactive(documentUri, `Current: ${local} Latest: ${remote}`);
     textEditor.setDecorations(decorator, [{ range }]);
   };
 
   dependencies.forEach(({ dependencyName, range }) => {
-    const decorator = decorateInactive('Loading...');
+    const decorator = decorateInactive(documentUri, 'Loading...');
     textEditor.setDecorations(decorator, [{ range }]);
     refreshWithVersion(dependencyName, range, decorator);
   });
 };
 
-export const handleEditor = (document: vscode.TextDocument): void => {
-  if (isPackageJson(document)) {
-    clearWindowDecorations(document.uri.toString());
-    setupDecorations(document);
+export const handleEditor = (textEditor: vscode.TextEditor): void => {
+  if (isPackageJson(textEditor.document) && textEditor.document.uri.scheme === 'file') {
+    clearWindowDecorations(textEditor.document.uri.toString());
+    setupDecorations(textEditor);
   }
 };

@@ -1,47 +1,40 @@
-import { OverviewRulerLane, TextEditorDecorationType, ThemableDecorationRenderOptions, window } from 'vscode';
+import { OverviewRulerLane, TextEditorDecorationType, window } from 'vscode';
 
-const currentDecorations: TextEditorDecorationType[] = [];
-const decorations: Map<string, TextEditorDecorationType[]> = new Map<string, TextEditorDecorationType[]>();
-
-export const clearAllDecorations = (): void => {
-  currentDecorations.map(decoration => decoration.dispose());
-  currentDecorations.length = 0;
-};
+const currentDecorations: Map<string, TextEditorDecorationType[]> = new Map<string, TextEditorDecorationType[]>();
 
 export const clearWindowDecorations = (documentUri: string): void => {
-  const decorationsList = decorations.get(documentUri);
+  const decorationsList = currentDecorations.get(documentUri);
   decorationsList?.map(decoration => decoration.dispose());
-  decorations.delete(documentUri);
+  currentDecorations.delete(documentUri);
 };
 
-const createDecoration = ({
-  overviewRulerColor,
-  light,
-  dark,
-  contentText
-}: {
-  contentText: string;
-  dark: ThemableDecorationRenderOptions;
-  light: ThemableDecorationRenderOptions;
-  overviewRulerColor: string;
-}) => {
+export const clearAllDecorations = (): void => {
+  Array.from(currentDecorations.keys()).forEach(uri => clearWindowDecorations(uri));
+};
+
+const createDecoration = (
+  documentUri: string,
+  contentText: string,
+  darkColor: string,
+  lightColor: string,
+  overviewRulerColor: string
+) => {
   const decoration = window.createTextEditorDecorationType({
     after: { contentText, margin: '1em' },
-    dark,
+    dark: { after: { color: darkColor }, color: darkColor },
     isWholeLine: false,
-    light,
+    light: { after: { color: lightColor }, color: lightColor },
     overviewRulerColor,
     overviewRulerLane: OverviewRulerLane.Right
   });
-  currentDecorations.push(decoration);
+  if (currentDecorations.has(documentUri)) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    currentDecorations.get(documentUri)!.push(decoration);
+  } else {
+    currentDecorations.set(documentUri, [decoration]);
+  }
   return decoration;
 };
 
-export const decorateInactive = (contentText: string) => {
-  return createDecoration({
-    contentText,
-    dark: { after: { color: 'darkgray' }, color: 'darkgray' },
-    light: { after: { color: 'lightgray' }, color: 'lightgray' },
-    overviewRulerColor: 'darkgray'
-  });
-};
+export const decorateInactive = (documentUri: string, contentText: string) =>
+  createDecoration(documentUri, contentText, 'darkgray', 'lightgray', 'darkgray');

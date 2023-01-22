@@ -4,12 +4,6 @@ import * as vscode from 'vscode';
 import { clearAllDecorations } from './decorations';
 import { handleEditor } from './editor';
 
-const refreshVisibleEditors = () => {
-  vscode.window.visibleTextEditors.forEach(textEditor => {
-    handleEditor(textEditor.document);
-  });
-};
-
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -17,16 +11,23 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, extension "package-versions" is now active!');
 
-  refreshVisibleEditors();
+  vscode.window.visibleTextEditors.forEach(textEditor => {
+    handleEditor(textEditor);
+  });
 
   const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(textEditor => {
     if (textEditor !== undefined) {
-      handleEditor(textEditor.document);
+      handleEditor(textEditor);
     }
   });
 
   const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(textDocumentChangeEvent => {
-    handleEditor(textDocumentChangeEvent.document);
+    const textEditor = vscode.window.visibleTextEditors.find(
+      editor => editor.document === textDocumentChangeEvent.document
+    );
+    if (textEditor) {
+      handleEditor(textEditor);
+    }
   });
 
   // The command has been defined in the package.json file

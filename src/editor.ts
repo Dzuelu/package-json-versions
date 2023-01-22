@@ -5,27 +5,31 @@ import { getDependencyPositions, isPackageJson } from './packageJson';
 
 const setupDecorations = async (textEditor: vscode.TextEditor) => {
   const documentUri = textEditor.document.uri.toString();
-  const documentFilePath = textEditor.document.uri.fsPath;
+  const filePath = textEditor.document.uri.fsPath;
   const dependencies = getDependencyPositions(textEditor.document);
   if (dependencies.length === 0) {
     return;
   }
 
   const refreshWithVersion = async (
-    dependencyName: string,
+    packageName: string,
     range: vscode.Range,
     previousDecoration: vscode.TextEditorDecorationType
   ) => {
     const [local, remote] = await Promise.all([
-      localVersions.get({ filePath: documentFilePath, packageName: dependencyName }),
-      remoteVersions.get(dependencyName)
+      localVersions.get({ filePath, packageName }),
+      remoteVersions.get(packageName)
     ]);
-    previousDecoration.dispose();
     const decorator = decorateInactive(documentUri, `Current: ${local} Latest: ${remote}`);
+    previousDecoration.dispose();
     textEditor.setDecorations(decorator, [{ range }]);
   };
 
-  dependencies.forEach(({ dependencyName, range }) => {
+  // clear after we try to get dependencies, if user editing we don't want to remove
+  // once we can't parse the json
+  clearWindowDecorations(documentUri);
+
+  dependencies.forEach(({ packageName: dependencyName, range }) => {
     const decorator = decorateInactive(documentUri, 'Loading...');
     textEditor.setDecorations(decorator, [{ range }]);
     refreshWithVersion(dependencyName, range, decorator);
@@ -34,7 +38,6 @@ const setupDecorations = async (textEditor: vscode.TextEditor) => {
 
 export const handleEditor = (textEditor: vscode.TextEditor): void => {
   if (isPackageJson(textEditor.document) && textEditor.document.uri.scheme === 'file') {
-    clearWindowDecorations(textEditor.document.uri.toString());
     setupDecorations(textEditor);
   }
 };

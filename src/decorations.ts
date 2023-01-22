@@ -38,3 +38,12 @@ const createDecoration = (
 
 export const decorateInactive = (documentUri: string, contentText: string) =>
   createDecoration(documentUri, contentText, 'darkgray', 'lightgray', 'darkgray');
+
+export const decorateMajor = (documentUri: string, contentText: string) =>
+  createDecoration(documentUri, contentText, 'red', 'red', 'red');
+
+export const decorateMinor = (documentUri: string, contentText: string) =>
+  createDecoration(documentUri, contentText, 'yellow', 'yellow', 'yellow');
+
+export const decoratePatch = (documentUri: string, contentText: string) =>
+  createDecoration(documentUri, contentText, 'green', 'green', 'green');

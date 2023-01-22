@@ -5,7 +5,7 @@ export const isPackageJson = (document: vscode.TextDocument) => {
   return document.fileName.endsWith('package.json');
 };
 
-export const getDependencies = (
+const getDependencies = (
   document: vscode.TextDocument
 ): { dependencies: string[]; devDependencies: string[]; peerDependencies: string[]; resolutions: string[] } => {
   const packageJson = parseJson<{
@@ -25,8 +25,7 @@ export const getDependencies = (
 export const getDependencyPositions = (
   document: vscode.TextDocument
 ): {
-  dependencyName: string;
-  linePosition: number;
+  packageName: string;
   range: vscode.Range;
 }[] => {
   const lines = Array.from({ length: document.lineCount }).map((val, index) => index);
@@ -39,17 +38,16 @@ export const getDependencyPositions = (
   const peerDependenciesLine = findLineOf(/\s*"peerDependencies"\s*:/);
   const resolutionsLine = findLineOf(/\s*"resolutions"\s*:/);
 
-  const dependencies = getDependencies(document);
+  const packageDependencies = getDependencies(document);
   const positions: {
-    dependencyName: string;
-    linePosition: number;
+    packageName: string;
     range: vscode.Range;
   }[] = [];
-  const addPosition = (dependencyName: string, linePosition: number) => {
+  const addPosition = (packageType: string, packageName: string, linePosition: number) => {
     const endOfLine = document.lineAt(linePosition).text.length;
+    console.log(`${packageType} ${packageName} at line ${linePosition} with length ${endOfLine}`);
     positions.push({
-      dependencyName,
-      linePosition,
+      packageName,
       range: new vscode.Range(
         // Create a range at the end of the package's line
         new vscode.Position(linePosition, endOfLine),
@@ -58,31 +56,28 @@ export const getDependencyPositions = (
     });
   };
 
+  // Assumes nice formatting with each package on a new line
   if (dependenciesLine) {
-    dependencies.dependencies.forEach((dependencyName, index) => {
-      if (!dependencies.peerDependencies.includes(dependencyName)) {
-        addPosition(dependencyName, dependenciesLine + index + 1);
-        console.log(`dependency ${dependencyName} at ${dependenciesLine + index + 1}`);
+    packageDependencies.dependencies.forEach((dependencyName, index) => {
+      if (!packageDependencies.peerDependencies.includes(dependencyName)) {
+        addPosition('dependency', dependencyName, dependenciesLine + index + 1);
       }
     });
   }
   if (devDependenciesLine) {
-    dependencies.devDependencies.forEach((dependencyName, index) => {
-      addPosition(dependencyName, devDependenciesLine + index + 1);
-      console.log(`devDependencies ${dependencyName} at ${devDependenciesLine + index + 1}`);
-    });
+    packageDependencies.devDependencies.forEach((dependencyName, index) =>
+      addPosition('devDependencies', dependencyName, devDependenciesLine + index + 1)
+    );
   }
   if (peerDependenciesLine) {
-    dependencies.peerDependencies.forEach((dependencyName, index) => {
-      addPosition(dependencyName, peerDependenciesLine + index + 1);
-      console.log(`devDependencies ${dependencyName} at ${peerDependenciesLine + index + 1}`);
-    });
+    packageDependencies.peerDependencies.forEach((dependencyName, index) =>
+      addPosition('peerDependencies', dependencyName, peerDependenciesLine + index + 1)
+    );
   }
   if (resolutionsLine) {
-    dependencies.resolutions.forEach((dependencyName, index) => {
-      addPosition(dependencyName, resolutionsLine + index + 1);
-      console.log(`devDependencies ${dependencyName} at ${resolutionsLine + index + 1}`);
-    });
+    packageDependencies.resolutions.forEach((dependencyName, index) =>
+      addPosition('resolutions', dependencyName, resolutionsLine + index + 1)
+    );
   }
 
   return positions;

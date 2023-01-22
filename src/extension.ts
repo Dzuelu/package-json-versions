@@ -1,6 +1,14 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import { clearAllDecorations } from './decorations';
+import { handleEditor } from './editor';
+
+const refreshVisibleEditors = () => {
+  vscode.window.visibleTextEditors.forEach(textEditor => {
+    handleEditor(textEditor.document);
+  });
+};
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -9,18 +17,17 @@ export function activate(context: vscode.ExtensionContext) {
   // This line of code will only be executed once when your extension is activated
   console.log('Congratulations, extension "package-versions" is now active!');
 
-  // Check any current active editors
-  vscode.window.visibleTextEditors.forEach(textEditor => {
-    // handleFileDecoration(textEditor.document, showDecorations)
+  refreshVisibleEditors();
+
+  const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(textEditor => {
+    if (textEditor !== undefined) {
+      handleEditor(textEditor.document);
+    }
   });
 
-  const onDidChangeActiveTextEditor = vscode.window.onDidChangeActiveTextEditor(
-    (texteditor: vscode.TextEditor | undefined) => {
-      if (texteditor !== undefined) {
-        // handleFileDecoration(texteditor.document, showDecorations)
-      }
-    }
-  );
+  const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(textDocumentChangeEvent => {
+    handleEditor(textDocumentChangeEvent.document);
+  });
 
   // The command has been defined in the package.json file
   // Now provide the implementation of the command with registerCommand
@@ -31,10 +38,10 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage('Hello World from package-versions!');
   });
 
-  context.subscriptions.push(helloWorld, onDidChangeActiveTextEditor);
+  context.subscriptions.push(helloWorld, onDidChangeActiveTextEditor, onDidChangeTextDocument);
 }
 
 // This method is called when your extension is deactivated
 export function deactivate() {
-  // empty...
+  clearAllDecorations();
 }

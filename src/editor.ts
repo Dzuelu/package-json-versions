@@ -5,6 +5,7 @@ import { getDependencyPositions, isPackageJson } from './packageJson';
 
 const setupDecorations = async (textEditor: vscode.TextEditor) => {
   const documentUri = textEditor.document.uri.toString();
+  const documentFilePath = textEditor.document.uri.fsPath;
   const dependencies = getDependencyPositions(textEditor.document);
   if (dependencies.length === 0) {
     return;
@@ -15,7 +16,10 @@ const setupDecorations = async (textEditor: vscode.TextEditor) => {
     range: vscode.Range,
     previousDecoration: vscode.TextEditorDecorationType
   ) => {
-    const [local, remote] = await Promise.all([localVersions.get(dependencyName), remoteVersions.get(dependencyName)]);
+    const [local, remote] = await Promise.all([
+      localVersions.get({ filePath: documentFilePath, packageName: dependencyName }),
+      remoteVersions.get(dependencyName)
+    ]);
     previousDecoration.dispose();
     const decorator = decorateInactive(documentUri, `Current: ${local} Latest: ${remote}`);
     textEditor.setDecorations(decorator, [{ range }]);

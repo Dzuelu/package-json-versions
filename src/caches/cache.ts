@@ -1,22 +1,23 @@
-export interface ICache<T> {
+export interface ICache<T, K> {
   clear: () => void;
-  get: (key: string) => Promise<T>;
+  get: (key: K) => Promise<T>;
 }
 
-type FetchFunction<T> = (key: string) => Promise<T>;
+type FetchFunction<T, K> = (key: K) => Promise<T>;
 
-export const buildCache = <T>(fetchFn: FetchFunction<T>): ICache<T> => {
+export const buildCache = <T, K>(fetchFn: FetchFunction<T, K>): ICache<T, K> => {
   const cache: Map<string, T> = new Map();
 
   return {
     clear: () => cache.clear(),
     get: async key => {
-      if (!cache.has(key)) {
+      const sanitized = JSON.stringify(key);
+      if (!cache.has(sanitized)) {
         const value = await fetchFn(key);
-        cache.set(key, value);
+        cache.set(sanitized, value);
       }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      return cache.get(key)!;
+      return cache.get(sanitized)!;
     }
   };
 };

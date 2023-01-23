@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 18
-      - run: yarn install --production --frozen-lockfile
+      - run: yarn install --frozen-lockfile
       - run: npm install -g @vscode/vsce
       - run: yarn vscode:prepublish
       - shell: bash

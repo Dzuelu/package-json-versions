@@ -1,10 +1,23 @@
 import * as vscode from 'vscode';
 import { localVersions, remoteVersions } from './caches';
+import { execute } from './caches/execute';
 import { clearAllDecorations } from './decorations';
 import { handleEditor } from './editor';
 
+const checkNpm = async (): Promise<void> => {
+  try {
+    const npmVersion = await execute('npm -v');
+    console.log(`Using npm version ${npmVersion}`);
+  } catch (error) {
+    // Don't have access(?) to npm, inform the user
+    vscode.window.showErrorMessage('Unable to run npm command!', JSON.stringify(error));
+  }
+};
+
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, extension "package-versions" is now active!');
+
+  checkNpm();
 
   vscode.window.visibleTextEditors.forEach(textEditor => {
     handleEditor(textEditor);

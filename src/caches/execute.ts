@@ -7,8 +7,8 @@ export const execute = async (command: string): Promise<string> =>
         reject(error);
       }
       if (stderr) {
-        reject(stderr);
+        reject(stderr.trim());
       }
-      resolve(stdout);
+      resolve(stdout.trim());
     });
   });

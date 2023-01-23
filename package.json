@@ -9,7 +9,7 @@
     "commands": [
       {
         "command": "package-versions.clear-cache",
-        "title": "Package Versions: Clear Cache"
+        "title": "Package JSON Versions: Clear Cache"
       }
     ]
   },

@@ -3,6 +3,7 @@ import { localVersions, remoteVersions } from './caches';
 import { execute } from './caches/execute';
 import { clearAllDecorations } from './decorations';
 import { handleEditor } from './editor';
+import { log } from './utils';
 
 const checkNpm = async (): Promise<void> => {
   try {
@@ -10,7 +11,9 @@ const checkNpm = async (): Promise<void> => {
     console.log(`Using npm version ${npmVersion}`);
   } catch (error) {
     // Don't have access(?) to npm, inform the user
-    vscode.window.showErrorMessage('Unable to run npm command!', JSON.stringify(error));
+    const message = `Unable to run npm command!\n${JSON.stringify(error)}`;
+    vscode.window.showErrorMessage(message);
+    log(message);
   }
 };
 
@@ -39,6 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   const clearCacheCommand = vscode.commands.registerCommand('package-versions.clear-cache', () => {
+    log('Clearing remote and local versions...');
     remoteVersions.clear();
     localVersions.clear();
     vscode.window.visibleTextEditors.forEach(textEditor => {

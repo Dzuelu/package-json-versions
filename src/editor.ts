@@ -27,7 +27,7 @@ const setupDecorations = async (textEditor: vscode.TextEditor) => {
     ]);
     const decorator = versionDecorator(documentUri, local, remote);
     previousDecoration.dispose();
-    // Don't show if no update needed
+    // Don't show if no update needed or failed to get versions
     if (decorator) {
       textEditor.setDecorations(decorator, [{ range }]);
     }

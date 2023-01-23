@@ -1,7 +1,7 @@
 {
-  "name": "package-versions",
-  "displayName": "package-versions",
-  "description": "Uses npm to see if there are new versions for packages",
+  "name": "package-json-versions",
+  "displayName": "Package JSON Versions",
+  "description": "Uses your shell npm to see if there are new versions for packages",
   "license": "MIT",
   "version": "0.0.1",
   "engines": {

@@ -1,19 +1,10 @@
 {
-  "name": "package-json-versions",
-  "displayName": "Package JSON Versions",
-  "description": "Uses your shell npm to see if there are new versions for packages",
-  "license": "MIT",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.74.0"
-  },
-  "categories": [
-    "Other"
-  ],
   "activationEvents": [
     "onLanguage:json"
   ],
-  "main": "./dist/extension.js",
+  "categories": [
+    "Other"
+  ],
   "contributes": {
     "commands": [
       {
@@ -22,36 +13,47 @@
       }
     ]
   },
-  "scripts": {
-    "vscode:prepublish": "yarn run package",
-    "compile": "webpack",
-    "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map",
-    "compile-tests": "tsc -p . --outDir out",
-    "watch-tests": "tsc -p . -w --outDir out",
-    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
-    "lint": "eslint . --ext .ts",
-    "test": "node ./out/test/runTest.js"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.74.0",
-    "@types/semver": "7.x",
-    "@types/glob": "8.x",
-    "@types/mocha": "10.x",
-    "@types/node": "16.x",
-    "eslint-config": "file:eslint-config",
-    "jest":"28.x",
-    "glob": "8.x",
-    "mocha": "10.x",
-    "typescript": "4.9.x",
-    "ts-loader": "9.x",
-    "webpack": "5.x",
-    "webpack-cli": "5.x",
-    "@vscode/test-electron": "2.x"
-  },
   "dependencies": {
     "semver": "7.x"
   },
+  "description": "Uses your shell npm to see if there are new versions for packages",
+  "devDependencies": {
+    "@types/glob": "8.x",
+    "@types/mocha": "10.x",
+    "@types/node": "16.x",
+    "@types/semver": "7.x",
+    "@types/vscode": "^1.74.0",
+    "@vscode/test-electron": "2.x",
+    "eslint-config": "file:eslint-config",
+    "glob": "8.x",
+    "jest": "28.x",
+    "mocha": "10.x",
+    "ts-loader": "9.x",
+    "typescript": "4.9.x",
+    "webpack": "5.x",
+    "webpack-cli": "5.x"
+  },
+  "displayName": "Package JSON Versions",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "license": "MIT",
+  "main": "./dist/extension.js",
+  "name": "package-json-versions",
   "peerDependencies": {},
-  "resolutions": {}
+  "publisher": "Dzuelu",
+  "repository": "https://github.com/Dzuelu/package-json-versions",
+  "resolutions": {},
+  "scripts": {
+    "compile": "webpack",
+    "compile-tests": "tsc -p . --outDir out",
+    "lint": "eslint . --ext .ts",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "test": "node ./out/test/runTest.js",
+    "vscode:prepublish": "yarn run package",
+    "watch": "webpack --watch",
+    "watch-tests": "tsc -p . -w --outDir out"
+  },
+  "version": "0.0.1"
 }

@@ -55,5 +55,5 @@
     "watch": "webpack --watch",
     "watch-tests": "tsc -p . -w --outDir out"
   },
-  "version": "0.0.1"
+  "version": "0.0.2"
 }

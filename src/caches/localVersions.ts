@@ -18,7 +18,7 @@ const getLocalVersion = async ({
     // We have to 'cd' to package.json directory to get the correct output too
     const version = await execute(`(cd ${packageJsonDir} && npm list ${packageName} --depth=0)`);
     console.log(`local ${packageName} version output ${version}`);
-    return version.trim().split('@').slice(-1)[0];
+    return version.split('@').slice(-1)[0];
   } catch (error) {
     console.error(`Failed to get local version of ${packageName}`, JSON.stringify(error));
     return '?';

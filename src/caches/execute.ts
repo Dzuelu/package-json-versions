@@ -1,8 +1,9 @@
 import { exec } from 'child_process';
+import { getConfig } from '../utils';
 
 export const execute = async (command: string): Promise<string> =>
   new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
+    exec(command, { shell: getConfig().shell }, (error, stdout, stderr) => {
       if (error) {
         reject(error);
       }

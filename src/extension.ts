@@ -5,23 +5,7 @@ import { clearAllDecorations } from './decorations';
 import { handleEditor } from './editor';
 import { log } from './utils';
 
-const checkNpm = async (): Promise<void> => {
-  try {
-    const npmVersion = await execute('npm -v');
-    console.log(`Using npm version ${npmVersion}`);
-  } catch (error) {
-    // Don't have access(?) to npm, inform the user
-    const message = `Unable to run npm command!\n${JSON.stringify(error)}`;
-    vscode.window.showErrorMessage(message);
-    log(message);
-  }
-};
-
-export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, extension "package-versions" is now active!');
-
-  checkNpm();
-
+const initialize = (context: vscode.ExtensionContext): void => {
   vscode.window.visibleTextEditors.forEach(textEditor => {
     handleEditor(textEditor);
   });
@@ -41,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
   });
 
-  const clearCacheCommand = vscode.commands.registerCommand('package-versions.clear-cache', () => {
+  const clearCacheCommand = vscode.commands.registerCommand('package-json-versions.clear-cache', () => {
     log('Clearing remote and local versions...');
     remoteVersions.clear();
     localVersions.clear();
@@ -51,6 +35,30 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   context.subscriptions.push(clearCacheCommand, onDidChangeActiveTextEditor, onDidChangeTextDocument);
+};
+
+export function activate(context: vscode.ExtensionContext) {
+  console.log('Congratulations, extension "package-versions" is now active!');
+
+  (async () => {
+    try {
+      const shell = await execute('echo $0');
+      log(`Using shell: ${shell}`);
+      const npmVersion = await execute('npm -v');
+      log(`Using npm version: ${npmVersion}`);
+      // All good! Were able to access npm command!
+      initialize(context);
+    } catch (error) {
+      // Don't have access(?) to npm, inform the user
+      const message = [
+        'Unable to run npm command! You may need to set your shell explicitly.',
+        'Set with "package-json-versions.shell" in vscode settings.',
+        JSON.stringify(error)
+      ].join('\n');
+      vscode.window.showErrorMessage(message);
+      log(message);
+    }
+  })();
 }
 
 export function deactivate() {

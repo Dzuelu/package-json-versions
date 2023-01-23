@@ -6,9 +6,19 @@
     "Other"
   ],
   "contributes": {
+    "configuration": {
+      "title": "Package JSON Versions",
+      "properties": {
+        "package-json-versions.shell": {
+          "type": "string",
+          "default": "",
+          "description": "A shell path override if the default shell does not have access to npm."
+        }
+      }
+    },
     "commands": [
       {
-        "command": "package-versions.clear-cache",
+        "command": "package-json-versions.clear-cache",
         "title": "Package JSON Versions: Clear Cache"
       }
     ]
@@ -55,5 +65,5 @@
     "watch": "webpack --watch",
     "watch-tests": "tsc -p . -w --outDir out"
   },
-  "version": "0.0.2"
+  "version": "0.0.3"
 }

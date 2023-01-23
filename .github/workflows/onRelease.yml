@@ -8,6 +8,7 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: release
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -16,7 +17,6 @@ jobs:
           node-version: 18
       - run: yarn install --frozen-lockfile
       - run: yarn add @vscode/vsce
-      - run: yarn vscode:prepublish
       - env:
-          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        run: yarn vsce publish -p "$PERSONAL_ACCESS_TOKEN"
+          VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        run: yarn vsce publish

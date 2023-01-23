@@ -14,9 +14,8 @@ jobs:
         with:
           node-version: 18
       - run: yarn install --frozen-lockfile
-      - run: npm install -g @vscode/vsce
+      - run: yarn global add @vscode/vsce
       - run: yarn vscode:prepublish
-      - shell: bash
-        env:
+      - env:
           PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        run: npm vsce publish -p "$PERSONAL_ACCESS_TOKEN"
+        run: yarn vsce publish -p "$PERSONAL_ACCESS_TOKEN"

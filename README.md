@@ -1,7 +1,13 @@
 # Package Versions NPM
 
-Local NPM installs can be set to pull from artifactory, but default VSCode only pulls from public NPM repos.
-So why not pull package information from NPM instead!
+Local NPM or Yarn installs can be set to pull from artifactory, but default VSCode only pulls from public NPM repos.
+NPM or Yarn are already used to check and update packages for your project.
+Why not use it in VSCode to check the local and remote versions for you!
+
+Works with BOTH NPM and Yarn installed packages so theres no setup besides what you've already done!
+
+
+## Example commands this package uses to get remote and local versions
 
 ### Get the latest from repository
 ```bash
@@ -16,73 +22,26 @@ your-project@0.0.1 /Users/git/your-project
 └── <package>@2.2.2
 ```
 
-#### Used projects to help me figure out extensions
-- https://github.com/pgsandstrom/package-json-upgrade
-
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Pulls `package.json` versions from NPM for both local and remote repositories. That's it!
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+![example loading from npm command](images/example.gif)
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+* `package-versions-npm.shell`: A shell path override if the default shell does not have access to npm. (Default uses sh)
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+See Github Issues for known issues, or to create one.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+See Github Releases for release notes.
 
-### 1.0.0
+#### Used projects to help me figure out VSCode extensions
+- https://github.com/pgsandstrom/package-json-upgrade
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**

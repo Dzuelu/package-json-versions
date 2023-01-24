@@ -7,7 +7,7 @@ interface Config {
 let currentConfig: Config | undefined;
 
 export const reloadConfig = () => {
-  const config = vscode.workspace.getConfiguration('package-json-versions');
+  const config = vscode.workspace.getConfiguration('package-versions-npm');
   currentConfig = {
     shell: config.get<string>('shell') || undefined
   };

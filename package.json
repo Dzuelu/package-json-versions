@@ -7,9 +7,9 @@
   ],
   "contributes": {
     "configuration": {
-      "title": "Package JSON Versions",
+      "title": "Package Versions NPM",
       "properties": {
-        "package-json-versions.shell": {
+        "package-versions-npm.shell": {
           "type": "string",
           "default": "",
           "description": "A shell path override if the default shell does not have access to npm."
@@ -18,8 +18,8 @@
     },
     "commands": [
       {
-        "command": "package-json-versions.clear-cache",
-        "title": "Package JSON Versions: Clear Cache"
+        "command": "package-versions-npm.clear-cache",
+        "title": "Package Versions NPM: Clear Cache"
       }
     ]
   },
@@ -43,16 +43,16 @@
     "webpack": "5.x",
     "webpack-cli": "5.x"
   },
-  "displayName": "Package JSON Versions",
+  "displayName": "Package Versions NPM",
   "engines": {
     "vscode": "^1.74.0"
   },
   "license": "MIT",
   "main": "./dist/extension.js",
-  "name": "package-json-versions",
+  "name": "package-versions-npm",
   "peerDependencies": {},
   "publisher": "Dzuelu",
-  "repository": "https://github.com/Dzuelu/package-json-versions",
+  "repository": "https://github.com/Dzuelu/package-versions-npm",
   "resolutions": {},
   "scripts": {
     "compile": "webpack",
@@ -65,5 +65,5 @@
     "watch": "webpack --watch",
     "watch-tests": "tsc -p . -w --outDir out"
   },
-  "version": "0.0.3"
+  "version": "0.0.4"
 }

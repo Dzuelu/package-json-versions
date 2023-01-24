@@ -1,4 +1,4 @@
-# Package Versions
+# Package Versions NPM
 
 Local NPM installs can be set to pull from artifactory, but default VSCode only pulls from public NPM repos.
 So why not pull package information from NPM instead!

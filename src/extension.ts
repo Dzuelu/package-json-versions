@@ -25,7 +25,7 @@ const initialize = (context: vscode.ExtensionContext): void => {
     }
   });
 
-  const clearCacheCommand = vscode.commands.registerCommand('package-json-versions.clear-cache', () => {
+  const clearCacheCommand = vscode.commands.registerCommand('package-versions-npm.clear-cache', () => {
     log('Clearing remote and local versions...');
     remoteVersions.clear();
     localVersions.clear();
@@ -38,7 +38,7 @@ const initialize = (context: vscode.ExtensionContext): void => {
 };
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Congratulations, extension "package-versions" is now active!');
+  console.log('Congratulations, extension "package-versions-npm" is now active!');
 
   (async () => {
     try {
@@ -52,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
       // Don't have access(?) to npm, inform the user
       const message = [
         'Unable to run npm command! You may need to set your shell explicitly.',
-        'Set with "package-json-versions.shell" in vscode settings.',
+        'Set with "package-versions-npm.shell" in vscode settings.',
         JSON.stringify(error)
       ].join('\n');
       vscode.window.showErrorMessage(message);
@@ -63,5 +63,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 export function deactivate() {
   clearAllDecorations();
-  console.log('Extension "package-versions" is now deactivated!');
+  console.log('Extension "package-versions-npm" is now deactivated!');
 }

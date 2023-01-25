@@ -1,7 +1,8 @@
 import { exec } from 'child_process';
 import { getConfig } from './config';
+import * as pLimit from 'p-limit';
 
-export const execute = async (command: string): Promise<string> =>
+const run = async (command: string): Promise<string> =>
   new Promise((resolve, reject) => {
     exec(command, { shell: getConfig().shell }, (error, stdout, stderr) => {
       if (error) {
@@ -13,3 +14,16 @@ export const execute = async (command: string): Promise<string> =>
       resolve(stdout.trim());
     });
   });
+
+let limit: pLimit.Limit;
+
+export const execute = async (command: string): Promise<string> => {
+  const instances = getConfig().shellInstances;
+  if (instances != null && instances > 0) {
+    if (limit == null || limit.length != instances) {
+      limit = pLimit(instances);
+    }
+    return limit(() => run(command));
+  }
+  return run(command);
+}

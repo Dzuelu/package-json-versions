@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 interface Config {
   shell?: string;
+  shellInstances?: number;
 }
 
 let currentConfig: Config | undefined;
@@ -9,7 +10,8 @@ let currentConfig: Config | undefined;
 export const reloadConfig = () => {
   const config = vscode.workspace.getConfiguration('package-versions-npm');
   currentConfig = {
-    shell: config.get<string>('shell') || undefined
+    shell: config.get<string>('shell') || undefined,
+    shellInstances: config.get<number>('shellInstances') || undefined
   };
 };
 

@@ -13,6 +13,11 @@
           "type": "string",
           "default": "",
           "description": "A shell path override if the default shell does not have access to npm."
+        },
+        "package-versions-npm.shellInstances": {
+          "type": "number",
+          "default": "3",
+          "description": "Number of shell instances to run concurrently. (less than 1 = unlimited)"
         }
       }
     },
@@ -24,7 +29,8 @@
     ]
   },
   "dependencies": {
-    "semver": "7.x"
+    "semver": "7.x",
+    "p-limit": "3.x"
   },
   "description": "Uses your shell npm to see if there are new versions for packages",
   "devDependencies": {

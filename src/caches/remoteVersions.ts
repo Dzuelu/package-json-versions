@@ -1,6 +1,6 @@
-import { log } from '../utils';
+import { log } from '../logger';
 import { buildCache } from './cache';
-import { execute } from './execute';
+import { execute } from '../execute';
 
 const getRemoteVersion = async (packageName: string): Promise<string> => {
   try {

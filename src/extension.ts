@@ -1,9 +1,11 @@
 import * as vscode from 'vscode';
-import { localVersions, remoteVersions } from './caches';
-import { execute } from './caches/execute';
+import { execute } from './execute';
 import { clearAllDecorations } from './decorations';
 import { handleEditor } from './editor';
-import { log } from './utils';
+import { log } from './logger';
+import { clearCache } from './commands';
+
+let isInitialized = false;
 
 const initialize = (context: vscode.ExtensionContext): void => {
   vscode.window.visibleTextEditors.forEach(textEditor => {
@@ -25,16 +27,8 @@ const initialize = (context: vscode.ExtensionContext): void => {
     }
   });
 
-  const clearCacheCommand = vscode.commands.registerCommand('package-versions-npm.clear-cache', () => {
-    log('Clearing remote and local versions...');
-    remoteVersions.clear();
-    localVersions.clear();
-    vscode.window.visibleTextEditors.forEach(textEditor => {
-      handleEditor(textEditor);
-    });
-  });
-
-  context.subscriptions.push(clearCacheCommand, onDidChangeActiveTextEditor, onDidChangeTextDocument);
+  context.subscriptions.push(onDidChangeActiveTextEditor, onDidChangeTextDocument);
+  isInitialized = true;
 };
 
 export function activate(context: vscode.ExtensionContext) {
@@ -59,6 +53,15 @@ export function activate(context: vscode.ExtensionContext) {
       log(message);
     }
   })();
+
+  // Register commands so VSCode doesn't show error when extension is not initialized
+  const clearCacheCommand = vscode.commands.registerCommand('package-versions-npm.clear-cache', () => {
+    if (isInitialized) {
+      clearCache();
+    }
+  });
+
+  context.subscriptions.push(clearCacheCommand);
 }
 
 export function deactivate() {

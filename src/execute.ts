@@ -1,5 +1,5 @@
 import { exec } from 'child_process';
-import { getConfig } from '../utils';
+import { getConfig } from './config';
 
 export const execute = async (command: string): Promise<string> =>
   new Promise((resolve, reject) => {

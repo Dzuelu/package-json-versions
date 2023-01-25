@@ -16,11 +16,13 @@ const run = async (command: string): Promise<string> =>
   });
 
 let limit: pLimit.Limit;
+let lastSetLimit: number;
 
 export const execute = async (command: string): Promise<string> => {
   const instances = getConfig().shellInstances;
   if (instances != null && instances > 0) {
-    if (limit == null || limit.length != instances) {
+    if (limit == null || lastSetLimit != instances) {
+      lastSetLimit = instances;
       limit = pLimit(instances);
     }
     return limit(() => run(command));

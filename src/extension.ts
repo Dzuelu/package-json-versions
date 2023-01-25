@@ -19,6 +19,9 @@ const initialize = (context: vscode.ExtensionContext): void => {
   });
 
   const onDidChangeTextDocument = vscode.workspace.onDidChangeTextDocument(textDocumentChangeEvent => {
+    if (textDocumentChangeEvent.document.languageId !== 'json') {
+      return;
+    }
     const textEditor = vscode.window.visibleTextEditors.find(
       editor => editor.document === textDocumentChangeEvent.document
     );
